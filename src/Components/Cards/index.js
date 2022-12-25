@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import {
     traerPersonajes,
-    traerGeneros,
     filtrar,
     meterFavoritos
 } from '../../redux/actions';
@@ -25,6 +24,7 @@ import {
 } from '@mui/icons-material'
 import Teemo from '../../teemo.png'
 import Notify from 'notiflix'
+import Cargando from '../Cargando/index.js'
 
 const Cards = () => {
     const navigate = useNavigate()
@@ -36,6 +36,7 @@ const Cards = () => {
     const pagina = useSelector(state => state.pagina)
     const favoritos = useSelector(state => state.favoritos)
     const modo = useSelector(state => state.modo)
+    const loading = useSelector(state => state.loading)
 
     Notify.Notify.init({
         success: {
@@ -45,7 +46,6 @@ const Cards = () => {
 
     useEffect(() => {
         dispatch(traerPersonajes(pagina, buscar, filtros.Tank, filtros.Mage, filtros.Assassin, filtros.Fighter, filtros.Marksman, filtros.Support))
-        dispatch(traerGeneros())
     }, [filtros])
 
     const filtramosGen = (e) => {
@@ -78,105 +78,110 @@ const Cards = () => {
 
     return (
         <>
-            <Box sx={{ backgroundColor: 'primary.main' }}>
-                <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Box>
-                        {
-                            generos?.map((gen, ubi) => {
-                                return (
-                                    <FormControlLabel
-                                        key={ubi}
-                                        sx={{
-                                            color: 'secondary.main'
-                                        }}
-                                        control={
-                                            <Checkbox
+            {
+                loading ?
+                    <Cargando />
+                    :
+                    <Box sx={{ backgroundColor: 'primary.main' }}>
+                        <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Box>
+                                {
+                                    generos?.map((gen, ubi) => {
+                                        return (
+                                            <FormControlLabel
+                                                key={ubi}
                                                 sx={{
-                                                    color: 'secondary.main',
-                                                    '&.Mui-checked': {
-                                                        color: 'secondary.main',
-                                                    },
+                                                    color: 'secondary.main'
                                                 }}
-                                                color='primary'
-                                                value={gen}
-                                                checked={filtros[gen]}
-                                                onChange={filtramosGen}
+                                                control={
+                                                    <Checkbox
+                                                        sx={{
+                                                            color: 'secondary.main',
+                                                            '&.Mui-checked': {
+                                                                color: 'secondary.main',
+                                                            },
+                                                        }}
+                                                        color='primary'
+                                                        value={gen}
+                                                        checked={filtros[gen]}
+                                                        onChange={filtramosGen}
+                                                    />
+                                                }
+                                                label={gen}
                                             />
-                                        }
-                                        label={gen}
-                                    />
-                                )
-                            })
-                        }
+                                        )
+                                    })
+                                }
+                            </Box>
+                        </Container>
+                        <Box>
+                            <Container sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', minHeight: "100vh" }}>
+                                {
+                                    personajes.results?.length ?
+                                        personajes.results?.map((perso, ubi) => {
+                                            return (
+                                                <Card
+                                                    key={ubi}
+                                                    sx={{ maxWidth: 345, margin: '20px 0', backgroundColor: 'primary.light' }}
+                                                >
+                                                    <CardMedia
+                                                        component="img"
+                                                        height="180"
+                                                        image={perso.imagen}
+                                                        alt={perso.id}
+                                                        sx={{ cursor: 'pointer' }}
+                                                        onClick={() => navigate(`/${perso.id}`)}
+                                                    />
+                                                    <CardContent>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                            <Typography
+                                                                gutterBottom
+                                                                variant="h5"
+                                                                component="div"
+                                                                color='secondary'
+                                                            >
+                                                                {perso.name}
+                                                            </Typography>
+                                                            {
+                                                                favoritos?.find(ele => ele.id === perso.id) ?
+                                                                    <Favorite
+                                                                        color='secondary'
+                                                                        sx={{ cursor: 'pointer' }}
+                                                                        onClick={() => subirFavorito(perso)}
+                                                                    />
+                                                                    :
+                                                                    <FavoriteBorder
+                                                                        color='secondary'
+                                                                        sx={{ cursor: 'pointer' }}
+                                                                        onClick={() => subirFavorito(perso)}
+                                                                    />
+                                                            }
+                                                        </Box>
+                                                        <Typography variant="body2" color='secondary'>
+                                                            {perso.blurb}
+                                                        </Typography>
+                                                    </CardContent>
+                                                    <CardActions>
+                                                        <Button
+                                                            variant='outlined'
+                                                            size="small"
+                                                            color='secondary'
+                                                            onClick={() => navigate(`/${perso.id}`)}
+                                                        >Ver mas</Button>
+                                                    </CardActions>
+                                                </Card>
+                                            )
+                                        })
+                                        :
+                                        <Box sx={{ width: '100vw', height: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                            <Typography color='secondary' variant='h2'>Sin resultados</Typography>
+                                            <img src={Teemo} style={{ width: '320px' }} />
+                                        </Box>
+                                }
+                            </Container>
+                        </Box>
                     </Box>
-                </Container>
-                <Box>
-                    <Container sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', minHeight: "100vh" }}>
-                        {
-                            personajes.results?.length ?
-                                personajes.results?.map((perso, ubi) => {
-                                    return (
-                                        <Card
-                                            key={ubi}
-                                            sx={{ maxWidth: 345, margin: '20px 0', backgroundColor: 'primary.light' }}
-                                        >
-                                            <CardMedia
-                                                component="img"
-                                                height="180"
-                                                image={perso.imagen}
-                                                alt={perso.id}
-                                                sx={{ cursor: 'pointer' }}
-                                                onClick={() => navigate(`/${perso.id}`)}
-                                            />
-                                            <CardContent>
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <Typography
-                                                        gutterBottom
-                                                        variant="h5"
-                                                        component="div"
-                                                        color='secondary'
-                                                    >
-                                                        {perso.name}
-                                                    </Typography>
-                                                    {
-                                                        favoritos?.find(ele => ele.id === perso.id) ?
-                                                            <Favorite
-                                                                color='secondary'
-                                                                sx={{ cursor: 'pointer' }}
-                                                                onClick={() => subirFavorito(perso)}
-                                                            />
-                                                            :
-                                                            <FavoriteBorder
-                                                                color='secondary'
-                                                                sx={{ cursor: 'pointer' }}
-                                                                onClick={() => subirFavorito(perso)}
-                                                            />
-                                                    }
-                                                </Box>
-                                                <Typography variant="body2" color='secondary'>
-                                                    {perso.blurb}
-                                                </Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button
-                                                    variant='outlined'
-                                                    size="small"
-                                                    color='secondary'
-                                                    onClick={() => navigate(`/${perso.id}`)}
-                                                >Ver mas</Button>
-                                            </CardActions>
-                                        </Card>
-                                    )
-                                })
-                                :
-                                <Box sx={{ width: '100vw', height: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Typography color='secondary' variant='h2'>Sin resultados</Typography>
-                                    <img src={Teemo} style={{ width: '320px' }} />
-                                </Box>
-                        }
-                    </Container>
-                </Box>
-            </Box>
+            }
         </>
     )
 }

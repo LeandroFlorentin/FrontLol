@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { traerGeneros, meterFavoritos, cambiarModo } from '../../redux/actions'
+import { meterFavoritos, cambiarModo } from '../../redux/actions'
 import { useNavigate } from 'react-router-dom'
 import SearchBar from '../SearchBar'
 import { AppBar, Toolbar, IconButton, Switch, Box, Typography, Button, Modal, Avatar, Stack, Badge } from '@mui/material'
@@ -42,10 +42,6 @@ const NavBar = () => {
         Notify.Notify.success(`${favorito} eliminado con exito`)
         dispatch(meterFavoritos(JSON.parse(localStorage.getItem("favoritos"))))
     }
-
-    useEffect(() => {
-        dispatch(traerGeneros())
-    }, [])
 
     return (
         <AppBar

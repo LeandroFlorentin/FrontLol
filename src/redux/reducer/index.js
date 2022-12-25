@@ -7,7 +7,8 @@ import {
     FILTROS,
     PAGINA,
     FAVORITOS,
-    MODO
+    MODO,
+    LOAD
 } from '../actions/index.js'
 
 const initialState = {
@@ -25,7 +26,8 @@ const initialState = {
     },
     pagina: 1,
     favoritos: [],
-    modo: true
+    modo: true,
+    loading: true
 }
 
 const rootReducer = (state = initialState, action) => {
@@ -77,6 +79,11 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 modo: action.payload
+            }
+        case LOAD:
+            return {
+                ...state,
+                loading: action.payload
             }
         default: return state
     }

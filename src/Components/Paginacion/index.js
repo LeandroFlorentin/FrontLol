@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Stack, Pagination } from '@mui/material';
-import { traerPersonajes, traerGeneros } from '../../redux/actions';
+import { traerPersonajes } from '../../redux/actions';
 
 const Paginacion = () => {
     const dispatch = useDispatch()
@@ -10,9 +10,7 @@ const Paginacion = () => {
     const filtros = useSelector(state => state.filtros)
     const pagina = useSelector(state => state.pagina)
     const { Fighter, Tank, Mage, Assassin, Marksman, Support } = filtros
-    useEffect(() => {
-        dispatch(traerGeneros())
-    }, [])
+
     const cambioPagina = (event, value) => {
         dispatch(traerPersonajes(value, buscamos, Tank, Mage, Assassin, Fighter, Marksman, Support))
     };
