@@ -11,12 +11,12 @@ export const MODO = 'MODO'
 
 export const traerPersonajes = (pag = 1, search, Tank, Mage, Assassin, Fighter, Marksman, Support) => async (dispatch) => {
     await dispatch({ type: PAGINA, payload: pag })
-    const objPJ = await axios.get(`http://localhost:3001/peleadores?pag=${pag}&search=${search}&Tank=${Tank}&Mage=${Mage}&Assassin=${Assassin}&Fighter=${Fighter}&Marksman=${Marksman}&Support=${Support}`);
+    const objPJ = await axios.get(`https://db-lol.onrender.com/peleadores?pag=${pag}&search=${search}&Tank=${Tank}&Mage=${Mage}&Assassin=${Assassin}&Fighter=${Fighter}&Marksman=${Marksman}&Support=${Support}`);
     return dispatch({ type: PERSONAJES, payload: objPJ.data })
 }
 
 export const traerPersonaje = (id) => async dispatch => {
-    const personaje = await axios.get(`http://ddragon.leagueoflegends.com/cdn/12.23.1/data/es_MX/champion/${id}.json`)
+    const personaje = await axios.get(`https://ddragon.leagueoflegends.com/cdn/12.23.1/data/es_MX/champion/${id}.json`)
     return dispatch({ type: PERSONAJE, payload: personaje.data.data[id] })
 }
 
@@ -25,7 +25,7 @@ export const clearPersonaje = () => dispatch => {
 }
 
 export const traerGeneros = () => async dispatch => {
-    const generos = await axios.get('http://localhost:3001/generos')
+    const generos = await axios.get('https://db-lol.onrender.com/generos')
     const arrayNuevo = generos.data.map(ele => ele.genero)
     return dispatch({ type: 'GENEROS', payload: arrayNuevo })
 }
