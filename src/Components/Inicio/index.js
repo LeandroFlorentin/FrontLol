@@ -10,13 +10,17 @@ import Cargando from '../Cargando/index.js';
 const Inicio = () => {
     const dispatch = useDispatch()
     const personajes = useSelector(state => state.personajes)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         !personajes.results?.length && dispatch(traerPersonajes())
+        setTimeout(() => {
+            setLoading(true)
+        }, 1000)
     }, [])
     return (
         <>{
-            personajes.results?.length ?
+            loading ?
                 <>
                     <NavBar />
                     <Grid container sx={{ marginTop: '80px' }}>
