@@ -13,7 +13,7 @@ export const LOAD = 'LOAD';
 export const traerPersonajes = (pag = 1, search, Tank, Mage, Assassin, Fighter, Marksman, Support) => async (dispatch) => {
     dispatch(setLoading(true))
     await dispatch({ type: PAGINA, payload: pag })
-    const objPJ = await axios.get(`https://db-lol.onrender.com/peleadores?pag=${pag}&search=${search}&Tank=${Tank}&Mage=${Mage}&Assassin=${Assassin}&Fighter=${Fighter}&Marksman=${Marksman}&Support=${Support}`)
+    const objPJ = await axios.get(`https://db-lol.onrender.com/peleadores?pag=${pag || "undefined"}&search=${search || "undefined"}&Tank=${Tank || "undefined"}&Mage=${Mage || "undefined"}&Assassin=${Assassin || "undefined"}&Fighter=${Fighter || "undefined"}&Marksman=${Marksman || "undefined"}&Support=${Support || "undefined"}`)
     dispatch(setLoading(false))
     return dispatch({ type: PERSONAJES, payload: objPJ.data })
 }
