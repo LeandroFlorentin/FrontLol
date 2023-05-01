@@ -13,7 +13,7 @@ export const LOAD = 'LOAD';
 export const traerPersonajes = (pag = 1, search, Tank, Mage, Assassin, Fighter, Marksman, Support) => async (dispatch) => {
     dispatch(setLoading(true))
     await dispatch({ type: PAGINA, payload: pag })
-    const objPJ = await axios.get(`http://ec2-18-228-232-214.sa-east-1.compute.amazonaws.com:3000?pag=${pag || "undefined"}&search=${search || "undefined"}&Tank=${Tank || "undefined"}&Mage=${Mage || "undefined"}&Assassin=${Assassin || "undefined"}&Fighter=${Fighter || "undefined"}&Marksman=${Marksman || "undefined"}&Support=${Support || "undefined"}`)
+    const objPJ = await axios.get(`http://ec2-18-228-232-214.sa-east-1.compute.amazonaws.com:3000?pag=${pag || "undefined"}&search=${search || "undefined"}&Tank=${Tank || "undefined"}&Mage=${Mage || "undefined"}&Assassin=${Assassin || "undefined"}&Fighter=${Fighter || "undefined"}&Marksman=${Marksman || "undefined"}&Support=${Support || "undefined"}`, { headers: { "Accept-Encoding": "gzip,deflate,compress" }, })
     dispatch(setLoading(false))
     console.log(objPJ)
     return dispatch({ type: PERSONAJES, payload: objPJ.data })
@@ -29,7 +29,7 @@ export const clearPersonaje = () => dispatch => {
 }
 
 export const traerGeneros = () => async dispatch => {
-    const generos = await axios.get('http://ec2-18-228-232-214.sa-east-1.compute.amazonaws.com:3000/generos')
+    const generos = await axios.get('http://ec2-18-228-232-214.sa-east-1.compute.amazonaws.com:3000/generos', { headers: { "Accept-Encoding": "gzip,deflate,compress" }, })
     const arrayNuevo = generos.data.map(ele => ele.genero)
     console.log(arrayNuevo)
     return dispatch({ type: 'GENEROS', payload: arrayNuevo })
