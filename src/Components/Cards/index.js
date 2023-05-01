@@ -49,7 +49,7 @@ const Cards = () => {
         dispatch(traerPersonajes(pagina, buscar, filtros.Tank, filtros.Mage, filtros.Assassin, filtros.Fighter, filtros.Marksman, filtros.Support))
         dispatch(traerGeneros())
     }, [filtros])
-    console.log(generos)
+
     const filtramosGen = (e) => {
         let filtro = e.target.value
         for (const genero in filtros) {
